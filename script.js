@@ -3,6 +3,7 @@ let offset = 0;
 let pokemonData = [];
 let imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/";
 let openDialog = false;
+let saveIndex;
 
 function init() {
   fetchPokemonUrls();
@@ -74,12 +75,13 @@ function openDialogOverlay(index) {
           </div>
           <p>weight: ${pokemon.weight} kg</p>
           <div>
-              <button onclick="navigateDialog(${index - 1})">left</button>
-              <button onclick="navigateDialog(${index + 1})">right</button>
+              <button onclick="navigateDialog(${index}, -1)">left</button>
+              <button onclick="navigateDialog(${index}, 1)">right</button>
           </div>
       </div>
     `;
   unableScrolling();
+  saveIndex = index;
 }
 
 function unableScrolling() {
@@ -95,3 +97,15 @@ function closeDialog() {
   dialog.classList.add("d_none");
   enableScrolling();
 }
+
+function navigateDialog(currentIndex, direction) {
+    let newIndex = currentIndex + direction;
+    if (newIndex >= pokemonData.length) {
+      newIndex = 0;
+    }
+    if (newIndex < 0) {
+      newIndex = pokemonData.length - 1;
+    }
+    saveIndex = newIndex;
+    openDialogOverlay(newIndex);
+  }
