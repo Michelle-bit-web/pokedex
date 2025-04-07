@@ -27,6 +27,11 @@ body {
   padding: 16px;
 }
 
+header{
+    display: flex;
+    justify-content: space-between;
+}
+
 header,
 footer {
   height: 100px;

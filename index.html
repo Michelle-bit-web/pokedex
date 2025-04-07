@@ -11,14 +11,22 @@
 <body onload="init()">
     <div class="content_limitation">
         <header>
-            header
+            <div>Pokedex & Logo</div>
+            <div>
+                <div>
+                <label for="search">What do you want to hunt?</label>
+                <input id="search" type="text">
+                </div>
+                <button>Hunt Pokémon</button>
+            </div>
         </header>
         <section>
             <div id="content" class="content">Content</div>
+            <button id="load_data_btn" onclick="loadMoreData()">Hunt more</button>
             <div id="dialog_overlay" class="dialog_overlay">Dialog-Overlay</div>
         </section>
         <footer>
-            footer
+            Impressum
         </footer>
     </div>
 </body>
