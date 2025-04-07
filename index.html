@@ -15,16 +15,18 @@
             <div>
                 <div>
                 <label for="search">What do you want to hunt?</label>
-                <input id="search" type="text">
+                <input id="search" type="text" placeholder="pokémon name...">
                 </div>
                 <button>Hunt Pokémon</button>
             </div>
         </header>
         <section>
-            <div id="content" class="content"></div>
+            <div id="content" class="content">
+            <div id="dialog_overlay" class="dialog_overlay d_none">Dialog-Overlay</div>
+            </div>
             <button id="load_data_btn" onclick="loadMoreData()">Hunt more</button>
-            <div id="dialog_overlay" class="dialog_overlay">Dialog-Overlay</div>
         </section>
+        
         <footer>
             Impressum
         </footer>
