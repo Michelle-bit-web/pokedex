@@ -1,0 +1,12 @@
+body{
+    margin:0;
+    display: flex;
+    justify-content: center;
+}
+
+.content_limitation{
+    width: 100%;
+    max-width: 1920px;
+    background-color: bisque;
+    padding: 24px;
+}
