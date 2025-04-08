@@ -1,11 +1,15 @@
-html{
-    scroll-behavior: smooth;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   display: flex;
   justify-content: center;
+}
+
+button {
+  cursor: pointer;
 }
 
 .content_limitation {
@@ -77,29 +81,84 @@ footer {
   box-shadow: 0 0 20px 5px #f73b7d;
 }
 
-.dialog_overlay{
-    background-color: #f73b7d55;
-    border: 2px solid black;
-    position: sticky;
-    top: 10%;
-    left: 0;
-    width: 100%;
-    height: 600px;
-    max-width: 1920px;
-    position: relative;
+.dialog_overlay {
+  background-color: #f73b7d55;
+  border: 2px solid black;
+  position: sticky;
+  top: 10%;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  max-width: 1920px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.dialog_top_content{
-    display: flex;
-    align-items: center;
-    
+.pokemon_card_dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+  width: 350px;
+  background-color: rgb(37, 36, 36);
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 16px;
+  color: white;
 }
 
-.close_btn{
-    position: absolute;
-    top:0;
-    right:0;
+.dialog_top_content {
+  display: flex;
+  align-items: center;
 }
-.d_none{
-    display: none;
+
+.bg_for_img_dialog {
+  background-color: black;
+  background: linear-gradient(195deg, #2b1b12, #f73b7d);
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pokemon_img_dialog {
+  height: 60%;
+}
+
+.pokemon_img_dialog:hover {
+  scale: 1.2;
+}
+
+.categories_dialog {
+  background-color: #4d4d4d;
+  padding: 8px;
+  border-radius: 10px;
+  height: 50%;
+}
+
+.category_titles_dialog {
+  display: flex;
+  font-size: 12px;
+  gap: 12px;
+  color: grey;
+}
+
+.onclick {
+  color: white;
+  padding-bottom: 8px;
+  border-bottom: 2px solid white;
+}
+
+.close_btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.d_none {
+  display: none;
 }
