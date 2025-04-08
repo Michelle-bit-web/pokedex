@@ -1,6 +1,7 @@
 let limit = 40;
 let offset = 0;
 let pokemonData = [];
+let pokemonTypesData = [];
 let imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/";
 let openDialog = false;
 let saveIndex;
@@ -19,6 +20,7 @@ async function fetchPokemonUrls() {
   getEachPokemonUrl(responseToJson);
 }
 
+//Hinweis: Detailansicht ja nur beim Klicken. Nur dann abrufen die Daten?! Farben als Gradient bauen
 //hier URL für name, types,png https://pokeapi.co/api/v2/pokemon-form/1/
 //Eine allgemeine URL bauen: "https://pokeapi.co/api/v2/${feature}/${i}/" wo feature und id austauschbar sind
 
@@ -27,26 +29,63 @@ async function getEachPokemonUrl(array) {
     const entry = array.results[i];
     let response = await fetch(entry.url);//hier vielleicht eine generelle Übergabe von Urls, die gefetched werden und an bestimmte Fkt übergeben werden
     let pokemonToJson = await response.json();
-    renderPokemons(pokemonToJson, i);
+    pokemonData[i] = pokemonToJson;
     console.log(entry.url);
-  }
+    renderPokemons(i);
+    
+    for (let j = 0; j < pokemonData[i].types.length; j++) {
+      const pokemonTypes = pokemonData[i].types[j].type.name;
+      pokemonTypesData[j] = pokemonTypes;
+      let types = pokemonTypesData[j];
+       document.getElementById(`types${i}`).innerHTML+=`<p>${types}</p>`
+  };
+  getTypeColor(i, `bg_for_img${i}`, `pokemon_card${i}`);
 }
 
-function renderPokemons(pokemon, i) {
-  pokemonData[i] = pokemon;
+function renderPokemons(i) {
+  let pokemon = pokemonData[i];
+  
   let contentContainer = document.getElementById("content");
   contentContainer.innerHTML += `
         <div id="pokemon_card${i}" class="pokemon_card" onclick="openDialogOverlay(${i})">
             <div class="pokemon_title">
-                <p> #${i + 1}</p>
                 <p> ${pokemon.species.name}</p>
+                <p> #${i + 1}</p>
             </div>
-            <div class="bg_for_img">
+            <div id="bg_for_img${i}" class="bg_for_img">
              <img class="pokemon_img" src="${imgUrl + (i + 1)}.gif">
             </div>
-           <p>weight: ${pokemon.weight} kg</p>
+            <div id="types${i}" class="div_types">
+            </div>
         </div>
        `;
+      }
+}
+
+function getTypeColor(i, imageBgId, cardId) {
+  let types = pokemonData[i].types;
+  let typeColors = [];
+
+  for (let j = 0; j < types.length; j++) {
+    let typeName = types[j].type.name;
+    let color = colors[typeName];
+    typeColors.push(color);
+  }
+
+  const imageBg = document.getElementById(imageBgId);
+  const card = document.getElementById(cardId);
+
+  if (!typeColors[0]) return; // Fallback
+
+  if (typeColors.length === 1) {
+    imageBg.style.background = typeColors[0];
+    card.style.border = `3px solid ${typeColors[0]}`;
+  } else {
+    const gradient = `linear-gradient(135deg, ${typeColors[0]}, ${typeColors[1]})`;
+    imageBg.style.background = gradient;
+    card.style.border = `3px solid ${typeColors[0]}`;
+    card.style.backgroundClip = "padding-box";
+  }
 }
 
 function loadMoreData() {
@@ -77,14 +116,14 @@ function openDialogOverlay(index) {
                 </div>
                 <button onclick="closeDialog()" class="close_btn">Close</button>
           </div>
-          <div class="bg_for_img_dialog">
+          <div id="bg_for_img_dialog${index}" class="bg_for_img_dialog">
               <img class="pokemon_img_dialog" src="${imgUrl + (index + 1)}.gif">
           </div>
           <div class="categories_dialog">
               <div class="category_titles_dialog">
-              <h3 class="onclick" onclick="switchCategory(event)"> category 1</h3>
-              <h3 onclick="switchCategory(event)"> category 2</h3>
-              <h3 onclick="switchCategory(event)"> category 3</h3>
+              <h3 class="onclick" onclick="switchCategory(event)">About</h3>
+              <h3 onclick="switchCategory(event)">Base Stats</h3>
+              <h3 onclick="switchCategory(event)">category 3</h3>
               <h3 onclick="switchCategory(event)"> category 4</h3>
               </div>
               <p>weight: ${pokemon.weight} kg</p>
@@ -99,15 +138,18 @@ function openDialogOverlay(index) {
       </div>
     `;
   unableScrolling();
+  getTypeColor(index, `bg_for_img_dialog${index}`, `pokemon_dialog${index}`);
   saveIndex = index;
 }
 
 function unableScrolling() {
   document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden"; 
 }
 
 function enableScrolling() {
   document.body.style.overflow = "";
+  document.documentElement.style.overflow = "";
 }
 
 function closeDialog() {
