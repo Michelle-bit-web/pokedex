@@ -82,10 +82,10 @@ function openDialogOverlay(index) {
           </div>
           <div class="categories_dialog">
               <div class="category_titles_dialog">
-              <h3 class="onclick"> category 1</h3>
-              <h3> category 2</h3>
-              <h3> category 3</h3>
-              <h3> category 4</h3>
+              <h3 class="onclick" onclick="switchCategory(event)"> category 1</h3>
+              <h3 onclick="switchCategory(event)"> category 2</h3>
+              <h3 onclick="switchCategory(event)"> category 3</h3>
+              <h3 onclick="switchCategory(event)"> category 4</h3>
               </div>
               <p>weight: ${pokemon.weight} kg</p>
               <p>weight: ${pokemon.weight} kg</p>
@@ -126,4 +126,11 @@ function navigateDialog(currentIndex, direction) {
     }
     saveIndex = newIndex;
     openDialogOverlay(newIndex);
+  }
+
+  function switchCategory(event){
+    let categoryTitles = document.querySelectorAll(".category_titles_dialog h3");
+    categoryTitles.forEach(h3 => {
+      h3.classList.remove('onclick');})
+    event.target.classList.add('onclick');
   }

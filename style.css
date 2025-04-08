@@ -135,8 +135,9 @@ footer {
 }
 
 .categories_dialog {
-  background-color: #4d4d4d;
-  padding: 8px;
+  border-bottom: 2px solid white;
+  background-color: #6e6c6c;
+  /* padding: 8px; */
   border-radius: 10px;
   height: 50%;
 }
@@ -148,10 +149,20 @@ footer {
   color: grey;
 }
 
+h3{
+  margin:0;
+  padding: 8px;
+  background-color: #4d4d4d;
+  border-radius: 10px;
+}
+
 .onclick {
   color: white;
   padding-bottom: 8px;
   border-bottom: 2px solid white;
+  background-color: #6e6c6c;
+  border-radius: 10px;
+ 
 }
 
 .close_btn {
