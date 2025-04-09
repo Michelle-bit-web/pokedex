@@ -13,6 +13,43 @@ body {
   justify-content: center;
 }
 
+.ball_big_circle{
+  background-color: rgb(255, 255, 255);
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* .ball_small_circle{
+  background-color: rgba(255, 255, 255, 0.279);
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  position: absolute;
+  z-index: 2;
+} */
+
+.ball_line{
+  background-color: rgb(196, 196, 196);
+  height: 5px;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+.ball_line_second{
+  background-color: rgb(196, 196, 196);
+  height: 15px;
+  width: 15px;
+  border-radius: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
 button {
   cursor: pointer;
 }
@@ -23,6 +60,15 @@ button {
   max-width: 1920px;
   background-color: rgb(0, 0, 0);
   padding: 24px;
+}
+
+.div_logo{
+  display: flex;
+  gap: 8px;
+}
+
+.div_pokeball{
+  padding-top: 8px;
 }
 
 header {
@@ -81,6 +127,12 @@ align-items: center;
   gap: 8px;
 }
 
+.div_types p{
+  padding: 8px;
+ background-color: rgba(255, 255, 255, 0.328);
+ border-radius: 10px;
+}
+
 .pokemon_title {
   display: flex;
   gap: 16px;
@@ -107,7 +159,7 @@ align-items: center;
 }
 
 .dialog_overlay {
-  background-color: #d7a7b855;
+  background-color: #000000b5;
   border: 2px solid black;
   position: fixed;
   top: 0;
@@ -115,7 +167,6 @@ align-items: center;
   width: 100%;
   height: 100vh;
   max-width: 1920px;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,13 +182,28 @@ align-items: center;
   background-color: rgb(37, 36, 36);
   border: 2px solid white;
   border-radius: 10px;
-  padding: 16px;
   color: white;
 }
 
 .dialog_top_content {
+  width: calc(100% - 32px);
+}
+
+.dialog_name{
+  text-align: start;
+  font-size: 28px;
+  margin-top: 0;
+}
+
+.content_categories{
+  padding: 16px;
+}
+
+.div_navigation_btn{
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  width: calc(100% - 48px);
 }
 
 .bg_for_img_dialog {
@@ -153,7 +219,7 @@ align-items: center;
 }
 
 .pokemon_img_dialog {
-  height: 30%;
+  height: 50%;
   margin-bottom: -50px;
   margin-right: -200px;
 }
@@ -165,9 +231,9 @@ align-items: center;
 .categories_dialog {
   border-bottom: 2px solid white;
   background-color: #6e6c6c;
-  /* padding: 8px; */
   border-radius: 10px;
   height: 50%;
+  margin-top: 16px;
 }
 
 .category_titles_dialog {
@@ -175,6 +241,14 @@ align-items: center;
   font-size: 12px;
   gap: 12px;
   color: grey;
+}
+
+.dialog_id{
+  text-align: end;
+}
+
+li{
+  text-indent: 30px;
 }
 
 h3{

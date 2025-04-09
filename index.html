@@ -12,7 +12,16 @@
 <body onload="init()">
     <div class="content_limitation">
         <header>
-            <div>Pokedex</div>
+            <div class="div_logo">
+                <div>Pokedex</div>
+                <div class="div_pokeball">
+                    <div class="ball_big_circle">
+                        <div class="ball_small_circle"></div>
+                        <div class="ball_line"></div>
+                        <div class="ball_line_second"></div>
+                    </div>
+                </div>
+            </div>
             <div>
                 <div>
                 <label for="search"></label>
@@ -23,14 +32,17 @@
         </header>
         <section>
             <div id="content" class="content">
-            <div id="dialog_overlay" class="dialog_overlay d_none"></div>
+            <div id="dialog_overlay" class="dialog_overlay d_none" onclick="closeDialog()"></div>
             <div id="loading_spinner" class="loading_spinner d_none">
                 <span class="loader"></span>
             </div>
             </div>
-            <button id="load_data_btn" class="load_data_btn" onclick="loadMoreData()">Hunt more</button>
+            <button id="load_data_btn" class="load_data_btn" onclick="loadMoreData()">
+                <div>
+                    Hunt more
+                </div>
+            </button>
         </section>
-        
         <footer>
             Impressum
         </footer>
