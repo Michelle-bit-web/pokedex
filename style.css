@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('./assets/font/pokemon/Pokemon\ Solid.ttf') format('truetype');
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -23,6 +28,9 @@ button {
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  font-family: 'Pokemon Solid';
+  font-size: 32px;
 }
 
 header,
@@ -31,6 +39,17 @@ footer {
   background-color: rgb(29, 29, 28);
   color: white;
   padding: 24px;
+}
+
+footer{
+  display: flex;
+  align-items: center;
+}
+
+section{
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .content {
@@ -184,7 +203,7 @@ h3{
 .loading_spinner{
   height: 100vh;
   width: 100%;
-  background-color: yellow;
+  background-color: rgba(0, 0, 0, 0.374);
 }
 
 /*loading spinner*/
@@ -212,6 +231,19 @@ h3{
   100%   { transform: rotate(360deg)}
 }
 
+.search_input{
+  border-radius: 10px;
+  text-align: center;
+}
+
+.load_data_btn{
+  border-radius: 100%;
+  height:80px;
+  width: 80px;
+  color: white;
+  background-color: red;
+  border: 3px solid red;
+}
 
 /* Backgroundcolors for types */
 .bug{

@@ -12,14 +12,13 @@
 <body onload="init()">
     <div class="content_limitation">
         <header>
-            <div>Pokedex & Logo</div>
+            <div>Pokedex</div>
             <div>
                 <div>
                 <label for="search"></label>
-                <input id="search" type="text" placeholder="search for pokémon..." oninput="searchPokemon()">
+                <input id="search" class="search_input" type="text" placeholder="search for pokémon..." oninput="searchPokemon()">
                 <div id="search_suggestion" class="search_suggestion"></div>
                 </div>
-                <button>Hunt Pokémon</button>
             </div>
         </header>
         <section>
@@ -29,7 +28,7 @@
                 <span class="loader"></span>
             </div>
             </div>
-            <button id="load_data_btn" onclick="loadMoreData()">Hunt more</button>
+            <button id="load_data_btn" class="load_data_btn" onclick="loadMoreData()">Hunt more</button>
         </section>
         
         <footer>
