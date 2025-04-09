@@ -15,8 +15,9 @@
             <div>Pokedex & Logo</div>
             <div>
                 <div>
-                <label for="search">What do you want to hunt?</label>
-                <input id="search" type="text" placeholder="pokémon name...">
+                <label for="search"></label>
+                <input id="search" type="text" placeholder="search for pokémon..." oninput="searchPokemon()">
+                <div id="search_suggestion" class="search_suggestion"></div>
                 </div>
                 <button>Hunt Pokémon</button>
             </div>
@@ -24,6 +25,9 @@
         <section>
             <div id="content" class="content">
             <div id="dialog_overlay" class="dialog_overlay d_none"></div>
+            <div id="loading_spinner" class="loading_spinner d_none">
+                <span class="loader"></span>
+            </div>
             </div>
             <button id="load_data_btn" onclick="loadMoreData()">Hunt more</button>
         </section>
