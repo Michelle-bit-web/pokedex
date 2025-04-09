@@ -17,3 +17,9 @@ let colors ={
     steel: "#60a1b8",
     ghost: "#704170",
 }
+
+// let data ={
+//     pokemonData: [],
+//     pokemonTypesData:[],
+//     pokemonNames: [],
+// }
