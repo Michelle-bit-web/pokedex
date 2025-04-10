@@ -229,16 +229,18 @@ function searchPokemon(){
       }else if(inputLowerCase.length >= 3){
         searchSuggestion.classList.add('d_none');
         document.getElementById('search_suggestion').innerHTML += `Pokémon nicht gefunden!`;
+      } else{
+        searchSuggestion.classList.add('d_none');
       }
 }
 
 function getSuggestedPokemon(filteredNames){
   let matchedPokemon = Object.values(pokemonData).find(pokename => pokename.name === filteredNames);
   document.getElementById('search').value = "";
+  document.getElementById('search_suggestion').classList.add('d_none');
 
   if(matchedPokemon){
     openDialogOverlay(matchedPokemon.id)
-    document.getElementById('search_suggestion').classList.add('d_none');
   } else{
     document.getElementById('search_suggestion').innerHTML = `Pokémon nicht gefunden!`;
   }
