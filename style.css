@@ -198,6 +198,18 @@ section {
   padding: 16px;
 }
 
+.single_category{
+  display: flex;
+  align-items: center;
+  gap: 24px
+}
+
+.stat_values{
+  height: 4px;
+  width: 120px;
+  border-radius: 10px;
+}
+
 .div_navigation_btn {
   display: flex;
   justify-content: space-between;

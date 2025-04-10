@@ -1,4 +1,4 @@
-let limit = 34;
+let limit = 8;
 let offset = 1;
 let openDialog = false;
 let category = "about";
@@ -138,7 +138,6 @@ async function renderDialogOverlay(id){
   }
   fitColorToType(typeColors, `bg_for_img_dialog${id}`, `pokemon_dialog${id}`);
   saveId = id;
-
   getCategoryContent(id, null);
 }
 
@@ -224,43 +223,68 @@ function loadStatsData(categoryData, id){
     let statValue = categoryData.stats[i].base_stat;
 
     console.log(statName);
-    document.getElementById(`category_content${id}`).innerHTML += `<p>${statName}: ${statValue}</p>`;
+    document.getElementById(`category_content${id}`).innerHTML += `<div class="single_category"><p>${statName}: ${statValue} <div id="${id}_${statName}" class="stat_values"></div></p></div>`;
+    generateBarChart(id, `${statName}`, statValue);
   }
 }
 
 console.log(pokemonTypesData) //leer
 console.log(pokemonNames) //geladene Pokemonnamen
 
-//Abgleich des Pokemon-Namens für die Suchleiste
-function searchPokemon(){
-  let inputLowerCase = document.getElementById('search').value.toLocaleLowerCase();
-  let searchSuggestion = document.getElementById('search_suggestion');
-  let filteredNames = pokemonNames.filter(pokemon => pokemon.startsWith(inputLowerCase));
-  searchSuggestion.innerHTML = "";
-      if(inputLowerCase.length >= 3 && filteredNames.length > 0){
-        searchSuggestion.classList.remove('d_none');
-        filteredNames.forEach(pokemonName => {searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemon('${pokemonName}')">${pokemonName}</span>`});
-      }else if(inputLowerCase.length >= 3){
-        searchSuggestion.classList.add('d_none');
-        document.getElementById('search_suggestion').innerHTML += `Pokémon nicht gefunden!`;
-      } else{
-        searchSuggestion.classList.add('d_none');
-      }
+function generateBarChart(id, statName, statValue){
+  let feature = document.getElementById(`${id}_${statName}`);
+  if(statValue < 60){
+    feature.style.backgroundColor = `#e62829`;
+  }
+  else if(100 > statValue > 60){
+    feature.style.backgroundColor = `#63c24e`;
+  }
+  if(statValue > 100){
+    feature.style.backgroundColor = `#1c7208
+  }`;
+  }
 }
 
-function getSuggestedPokemon(filteredNames){
-  let matchedPokemon = Object.values(pokemonData).find(pokename => pokename.name === filteredNames);
+//Abgleich des Pokemon-Namens für die Suchleiste
+async function searchPokemon() {
+  let input = document.getElementById('search').value.toLowerCase();
+  let searchSuggestion = document.getElementById('search_suggestion');
+  searchSuggestion.innerHTML = "";
+
+  if (input.length < 3) {
+    searchSuggestion.classList.add('d_none');
+    return;
+  }
+
+  const allDataUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
+  const response = await fetch(allDataUrl);
+  const data = await response.json();
+
+  const filteredResults = data.results.filter(pokemon => pokemon.name.startsWith(input));
+
+  if (filteredResults.length > 0) {
+    searchSuggestion.classList.remove('d_none');
+    filteredResults.forEach(pokemon => {
+      searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemonByUrl('${pokemon.url}')">${pokemon.name}</span>`;
+    });
+  } else {
+    searchSuggestion.classList.remove('d_none');
+    searchSuggestion.innerHTML = `Pokémon nicht gefunden!`;
+  }
+}
+
+async function getSuggestedPokemonByUrl(url) {
+  const response = await fetch(url);
+  const pokemon = await response.json();
+
   document.getElementById('search').value = "";
   document.getElementById('search_suggestion').classList.add('d_none');
 
-  if(matchedPokemon){
-    openDialogOverlay(matchedPokemon.id)
-  } else{
+  if (pokemon && pokemon.id) {
+    openDialogOverlay(pokemon.id);
+  } else {
     document.getElementById('search_suggestion').innerHTML = `Pokémon nicht gefunden!`;
   }
-  // let getId = pokemonData.name.filter(pokemon => pokemon == filteredNames)
-  // console.log(getId);
-  // openDialogOverlay(getId);
 }
 
 // function loadEvolutionData(categoryData, id){
@@ -280,47 +304,3 @@ function getSuggestedPokemon(filteredNames){
 //     return responseToJson;
 //     document.getElementById(`category_content${id}`).innerHTML += categoryTemplateEffectiveness(id, category, response);
 // }
-
-
-  //Nutzen für aufrufen von Daten, die nicht hier geladen wurden
-//   function a(currentId, direction) {
-//     let newId = currentId + direction;
-//     if (newId >= pokemonData.length) {
-//       newId = 0;
-//     }
-//     if (newId < 0) {
-//       newId = pokemonData.length - 1;
-//     }
-//     saveId = newId;
-//     renderDialogOverlay(newId);
-//   }
-
-// Input-Suchfunktion bauen
-//   async function searchPokemon(){
-//     let inputLowerCase = document.getElementById('search').value.toLocaleLowerCase();
-//     if(inputLowerCase.length < 3){
-//         document.getElementById('search_suggestion').innerHTML = "";
-//         return;
-//     }
-//     else{
-//       const allDataUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
-//       let baseData = await fetchData(allDataUrl);
-//       console.log(baseData) //Ein Array, das Arrays enthält in 100er Schritten
-
-//       for (let i = 0; i < baseData.length; i++) {
-//       const element = baseData[i];
-//       for (let j = 0; j < element.length; j++) {
-//        console.log(element[0])
-//         // console.log((element[j].filter(value => value.name == `${inputLowerCase}`)))
-//       }
-//      }
-//     }
-//     // let arrayComparison = baseData.name.map(value => value.includes(`${inputLowerCase}`));
-//     console.log(arrayComparison)
-//     if(inputLowerCase.length < 3){
-//       document.getElementById('search_suggestion').innerHTML = "";
-//       return;
-//     } else if(arrayComparison.includes(`${inputLowerCase}`)){
-//       document.getElementById('search_suggestion').innerHTML += `${inputLowerCase}`;
-//     }
-//   }}

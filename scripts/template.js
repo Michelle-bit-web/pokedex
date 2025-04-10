@@ -60,32 +60,43 @@ function aboutCategoryTemplate(id, response){
     `
 }
 
-function statsCategoryTemplate(id, response){
-    return `
-    <p>HP:</p><p>${response.species.name}</p>
-    <p>Attack:</p><p>${response.height} cm</p>
-    <p>Defense:</p><p>${response.weight} kg</p>
-    <p>Sp. Att.:</p><p id="abilities${id}"></p>
-    <p>Sp. Def.:</p><p id="abilities${id}"></p>
-    <p>Speed:</p><p id="abilities${id}"></p>
-    <p>Total:</p><p id="abilities${id}"></p>
-    `
-}
+// function statsCategoryTemplate(id, response){
+//     return `
+//     <div>
+//         <p>HP:</p><p>${response.species.name}</p>
+//         <p>Attack:</p><p>${response.height} cm</p>
+//         <p>Defense:</p><p>${response.weight} kg</p>
+//         <p>Sp. Att.:</p><p id="abilities${id}"></p>
+//         <p>Sp. Def.:</p><p id="abilities${id}"></p>
+//         <p>Speed:</p><p id="abilities${id}"></p>
+//         <p>Total:</p><p id="abilities${id}"></p>
+//     </div>
+//     <div>
+//         <div id="${response.species.name}_hp"></div>
+//         <div id="${response.species.name}_attack"></div>
+//         <div id="${response.species.name}_defense"></div>
+//         <div id="${response.species.name}_spattack"></div>
+//         <div id="${response.species.name}_spdefense"></div>
+//         <div id="${response.species.name}_speed"></div>
+//         <div> id="${response.species.name}_total"</div>
+//     </div>
+//     `
+// }
 
-function evolutionCategoryTemplate(id, response){
-    return `
-    <p>species:</p><p>${response.species.name}</p>
-    <p>height:</p><p>${response.height} cm</p>
-    <p>weight:</p><p>${response.weight} kg</p>
-    <p>abilities:</p><p id="abilities${id}"></p>
-    `
-}
+// function evolutionCategoryTemplate(id, response){
+//     return `
+//     <p>species:</p><p>${response.species.name}</p>
+//     <p>height:</p><p>${response.height} cm</p>
+//     <p>weight:</p><p>${response.weight} kg</p>
+//     <p>abilities:</p><p id="abilities${id}"></p>
+//     `
+// }
 
-function effectivenessCategoryTemplate(id, response){
-    return `
-    <p>species:</p><p>${response.species.name}</p>
-    <p>height:</p><p>${response.height} cm</p>
-    <p>weight:</p><p>${response.weight} kg</p>
-    <p>abilities:</p><p id="abilities${id}"></p>
-    `
-}
+// function effectivenessCategoryTemplate(id, response){
+//     return `
+//     <p>species:</p><p>${response.species.name}</p>
+//     <p>height:</p><p>${response.height} cm</p>
+//     <p>weight:</p><p>${response.weight} kg</p>
+//     <p>abilities:</p><p id="abilities${id}"></p>
+//     `
+// }
