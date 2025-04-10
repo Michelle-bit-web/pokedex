@@ -1,51 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./scripts/db.js"></script>
     <script src="./scripts/template.js"></script>
     <script src="./script.js"></script>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
     <title>Pokedex</title>
-</head>
-<body onload="init()">
+  </head>
+  <body onload="init()">
     <div class="content_limitation">
-        <header>
-            <div class="div_logo">
-                <div>Pokedex</div>
-                <div class="div_pokeball">
-                    <div class="ball_big_circle">
-                        <div class="ball_small_circle"></div>
-                        <div class="ball_line"></div>
-                        <div class="ball_line_second"></div>
-                    </div>
-                </div>
+      <header>
+        <div class="div_logo">
+          <div>Pokedex</div>
+          <div class="div_pokeball">
+            <div class="ball_big_circle">
+              <div class="ball_line"></div>
+              <div class="ball_small_circle"></div>
             </div>
-            <div>
-                <div class="div_search">
-                <label for="search"></label>
-                <input id="search" class="search_input" type="text" placeholder="search for pokémon..." oninput="searchPokemon()">
-                <div id="search_suggestion" class="search_suggestion d_none"></div>
-                </div>
+          </div>
+        </div>
+        <div>
+          <div class="div_search">
+            <label for="search"></label>
+            <input
+              id="search"
+              class="search_input"
+              type="text"
+              placeholder="search for pokémon..."
+              oninput="searchPokemon()"
+            />
+            <div id="search_suggestion" class="search_suggestion d_none"></div>
+          </div>
+        </div>
+      </header>
+      <section>
+        <div id="content" class="content">
+          <div id="dialog_overlay" class="dialog_overlay d_none" onclick="closeDialog()"></div>
+          <div id="loading_spinner" class="loading_spinner d_none">
+            <span class="loader"></span>
+          </div>
+        </div>
+        <button id="load_data_btn" class="load_data_btn" onclick="loadMoreData()">
+          <div class="div_pokeball_load">
+            <div class="ball_big_circle_load">
+              <div class="ball_small_circle_load"></div>
+              <div class="ball_line_load">Hunt more</div>
             </div>
-        </header>
-        <section>
-            <div id="content" class="content">
-            <div id="dialog_overlay" class="dialog_overlay d_none" onclick="closeDialog()"></div>
-            <div id="loading_spinner" class="loading_spinner d_none">
-                <span class="loader"></span>
-            </div>
-            </div>
-            <button id="load_data_btn" class="load_data_btn" onclick="loadMoreData()">
-                <div>
-                    Hunt more
-                </div>
-            </button>
-        </section>
-        <footer>
-            Impressum
-        </footer>
+          </div>
+        </button>
+      </section>
+      <footer>Impressum</footer>
     </div>
-</body>
+  </body>
 </html>
