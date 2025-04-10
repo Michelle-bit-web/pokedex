@@ -126,6 +126,7 @@ align-items: center;
 
 .pokemon_card:hover {
   box-shadow: 0 0 20px 5px var(--hoverColor);
+  cursor: pointer;
 }
 
 .div_types{
