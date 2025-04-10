@@ -5,14 +5,14 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color:  red white;
 }
 
 body {
   margin: 0;
   display: flex;
   justify-content: center;
-  scrollbar-width: thin;
-  scrollbar-color:  red white;
 }
 
 .ball_big_circle{
@@ -315,11 +315,15 @@ position: relative;
 .search_input{
   border-radius: 10px;
   text-align: center;
+  border-color: light-dark(rgb(219, 45, 45), rgb(243, 8, 8));
 }
 
 .search_suggestion{
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
   height: 100px;
-  width: 180px;
+  width: 160px;
   background-color: rgba(255, 255, 255, 0.77);
   border-radius: 10px;
   color: black;
@@ -328,15 +332,17 @@ position: relative;
   top: 80%;
   overflow: auto;
   z-index: 1100;
+  scrollbar-width: thin;
 }
 
 .suggested_pokename{
-  width: 180px;
+ padding-left: 8px;
 }
 
 .suggested_pokename:hover{
   cursor: pointer; 
   background-color: rgba(176, 176, 176, 0.77);
+  border-radius: 10px;
 }
 
 .load_data_btn{

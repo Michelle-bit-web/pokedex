@@ -221,18 +221,28 @@ function searchPokemon(){
   let searchSuggestion = document.getElementById('search_suggestion');
   let filteredNames = pokemonNames.filter(pokemon => pokemon.startsWith(inputLowerCase));
   searchSuggestion.innerHTML = "";
-      if(inputLowerCase.length >= 3){
+      if(inputLowerCase.length >= 3 && filteredNames.length > 0){
         searchSuggestion.classList.remove('d_none');
-        filteredNames.forEach(pokemonName => 
-        searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemon(${pokemonName})">${pokemonName}</span> <br>`);
+        filteredNames.forEach(pokemonName => {searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemon('${pokemonName}')">${pokemonName}</span>`});
+      }else if(inputLowerCase.length >= 3){
+        searchSuggestion.classList.add('d_none');
+        document.getElementById('search_suggestion').innerHTML += `Pokémon nicht gefunden!`;
       }
 }
 
 function getSuggestedPokemon(filteredNames){
-  document.getElementById('search_suggestion').classList.add('d_none');
-  let getId = pokemonData.name.filter(pokemon => pokemon == filteredNames)
-  console.log(getId);
-  openDialogOverlay(getId);
+  let matchedPokemon = Object.values(pokemonData).find(pokename => pokename.name === filteredNames);
+  document.getElementById('search').value = "";
+
+  if(matchedPokemon){
+    openDialogOverlay(matchedPokemon.id)
+    document.getElementById('search_suggestion').classList.add('d_none');
+  } else{
+    document.getElementById('search_suggestion').innerHTML = `Pokémon nicht gefunden!`;
+  }
+  // let getId = pokemonData.name.filter(pokemon => pokemon == filteredNames)
+  // console.log(getId);
+  // openDialogOverlay(getId);
 }
 
 // function loadEvolutionData(categoryData, id){
