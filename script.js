@@ -1,4 +1,4 @@
-let limit = 13;
+let limit = 6;
 let offset = 1;
 let openDialog = false;
 let category = "about";
@@ -35,6 +35,7 @@ async function fetchData(url) {
   const response = await fetch(`${url}`);
   let responseToJson = await response.json();
   pokemonNames.push(responseToJson.name);
+  console.log(pokemonNames) //hier speicher ich die Namen in pokemonNames
   return responseToJson;
 }
 
@@ -47,7 +48,8 @@ function removeLoadingSpinner(){
 }
 
 function renderPokemonData(responseData){
-  pokemonData[responseData.id] = responseData;
+  pokemonData[responseData.id] = responseData; //hier speicher ich alle Daten eines Pokemon
+  console.log(pokemonData[responseData.id])
   let contentContainer = document.getElementById("content");
   contentContainer.innerHTML += pokemonCardTemplate(responseData);
   renderPokemonTypes(responseData);
@@ -208,6 +210,29 @@ function loadStatsData(categoryData, id){
     console.log(statName);
     document.getElementById(`category_content${id}`).innerHTML += `<p>${statName}: ${statValue}</p>`;
   }
+}
+
+console.log(pokemonTypesData) //leer
+console.log(pokemonNames) //geladene Pokemonnamen
+
+//Abgleich des Pokemon-Namens für die Suchleiste
+function searchPokemon(){
+  let inputLowerCase = document.getElementById('search').value.toLocaleLowerCase();
+  let searchSuggestion = document.getElementById('search_suggestion');
+  let filteredNames = pokemonNames.filter(pokemon => pokemon.startsWith(inputLowerCase));
+  searchSuggestion.innerHTML = "";
+      if(inputLowerCase.length >= 3){
+        searchSuggestion.classList.remove('d_none');
+        filteredNames.forEach(pokemonName => 
+        searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemon(${pokemonName})">${pokemonName}</span> <br>`);
+      }
+}
+
+function getSuggestedPokemon(filteredNames){
+  document.getElementById('search_suggestion').classList.add('d_none');
+  let getId = pokemonData.name.filter(pokemon => pokemon == filteredNames)
+  console.log(getId);
+  openDialogOverlay(getId);
 }
 
 // function loadEvolutionData(categoryData, id){
