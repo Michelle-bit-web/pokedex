@@ -1,4 +1,4 @@
-let limit = 6;
+let limit = 34;
 let offset = 1;
 let openDialog = false;
 let category = "about";
@@ -16,11 +16,11 @@ const imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites
 //Eine allgemeine URL bauen: "https://pokeapi.co/api/v2/${feature}/${i}/" wo feature und id austauschbar sind
 
 function init() {
-  getFetchResponse();
+  showLoadingSpinner();
 }
 
 async function getFetchResponse(){
-  showLoadingSpinner();
+  
   for (let i = offset; i <= limit; i++) {
     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
     const responseData = await fetchData(generalUrl);
@@ -41,6 +41,7 @@ async function fetchData(url) {
 
 function showLoadingSpinner(){
   document.getElementById('loading_spinner').classList.remove('d_none');
+  getFetchResponse();
 }
 
 function removeLoadingSpinner(){
@@ -57,26 +58,28 @@ function renderPokemonData(responseData){
 
 function renderPokemonTypes(pokemon){
   let typeColors = [];
+
   for (let t = 0; t < pokemon.types.length; t++) {
-    // pokemonTypesData = pokemon.types[t].name;
-    let types = pokemon.types[t].type;
-    let type = types.name;
-    document.getElementById(`types${pokemon.id}`).innerHTML+=`<p>${type}</p>`;
-    pokemonTypesUrl.push(`${pokemon.name}`, `${types.url}`);
-    console.log(pokemonTypesUrl)
-    // document.getElementById(`types_overlay${pokemon.id}`).innerHTML+=`<p>${type}</p>`;
-    if(colors[type]){
+    let type = pokemon.types[t].type.name;
+    let typeId = `${pokemon.id}_${type}`;
+
+    document.getElementById(`types${pokemon.id}`).innerHTML += `<p id="${typeId}">${type}</p>`;
+    pokemonTypesUrl.push(pokemon.name, pokemon.types[t].type.url);
+
+    if (colors[type]) {
       typeColors.push(colors[type]);
+      setTypeBorder(typeId, type); // ⬅ hier wird jedem <p> eine Farbe gegeben
     }
   }
-  fitColorToType(typeColors, `bg_for_img${pokemon.id}`, `pokemon_card${pokemon.id}`);
 
+  fitColorToType(typeColors, `bg_for_img${pokemon.id}`, `pokemon_card${pokemon.id}`);
 }
 
 function fitColorToType(typeColors, imageBgId, cardId){
   let imageBg = document.getElementById(imageBgId);
   let card = document.getElementById(cardId);
   if (!imageBg || !card || !typeColors.length) return;
+  
   if (typeColors.length === 1) {
     imageBg.style.background = typeColors[0];
     card.style.border = `3px solid ${typeColors[0]}`;
@@ -90,13 +93,24 @@ function fitColorToType(typeColors, imageBgId, cardId){
   }
 }
 
+function setTypeBorder(pTagId, typeName){
+  const element = document.getElementById(pTagId);
+  if (element && colors[typeName]) {
+    element.style.border = `2px solid ${colors[typeName]}`;
+    element.style.borderRadius = "5px";
+    element.style.padding = "2px 6px";
+    element.style.margin = "2px";
+    element.style.display = "inline-block";
+  }
+}
+
 function loadMoreData() {
   document.getElementById("load_data_btn").disabled = true;
   if (limit <= 350) {
     console.log("is loading");
     limit += 40;
     offset += 40;
-    getFetchResponse();
+   showLoadingSpinner();
   } 
     document.getElementById("load_data_btn").disabled = false;
 }
