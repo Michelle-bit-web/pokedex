@@ -80,11 +80,13 @@ function fitColorToType(typeColors, imageBgId, cardId){
   if (typeColors.length === 1) {
     imageBg.style.background = typeColors[0];
     card.style.border = `3px solid ${typeColors[0]}`;
+    card.style.setProperty('--hoverColor', typeColors[0]);
   } else {
     const gradient = `linear-gradient(135deg, ${typeColors[0]}, ${typeColors[1]})`;
     imageBg.style.background = gradient;
     card.style.border = `3px solid ${typeColors[0]}`;
     card.style.backgroundClip = "padding-box";
+    card.style.setProperty('--hoverColor', typeColors[0]);
   }
 }
 
