@@ -722,7 +722,8 @@ h3:hover {
     color: grey;
     font-size: 10px;
   }
- 
+}
+
 @media(max-width:550px){
   .content_impressum a{
     font-size: 12px;

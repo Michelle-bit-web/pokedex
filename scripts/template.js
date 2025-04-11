@@ -1,8 +1,3 @@
-//gif-url https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/
-//png-shiny-url https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/
-//png https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/ruby-sapphire/
-//https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/shiny/
-
 function pokemonCardTemplate(data){
     return `
         <div id="pokemon_card${data.id}" class="pokemon_card" onclick="openDialogOverlay(${data.id})">
@@ -23,11 +18,8 @@ function getDialogTemplate(id, pokemon){
     return `
     <div id="pokemon_dialog${id}" class="pokemon_card_dialog" onclick="event.stopPropagation()">
         <div class="dialog_top_content">
-              
                   <p class="dialog_id">#${id}</p>
                   <p class="dialog_name">${pokemon.species.name}</p>
-            
-            
               <button onclick="closeDialog()" class="close_btn">Close</button>
         </div>
         <div id="bg_for_img_dialog${id}" class="bg_for_img_dialog">
@@ -59,44 +51,3 @@ function aboutCategoryTemplate(id, response){
     <p>Abilities:<p id="abilities${id}"></p></p>
     `
 }
-
-// function statsCategoryTemplate(id, response){
-//     return `
-//     <div>
-//         <p>HP:</p><p>${response.species.name}</p>
-//         <p>Attack:</p><p>${response.height} cm</p>
-//         <p>Defense:</p><p>${response.weight} kg</p>
-//         <p>Sp. Att.:</p><p id="abilities${id}"></p>
-//         <p>Sp. Def.:</p><p id="abilities${id}"></p>
-//         <p>Speed:</p><p id="abilities${id}"></p>
-//         <p>Total:</p><p id="abilities${id}"></p>
-//     </div>
-//     <div>
-//         <div id="${response.species.name}_hp"></div>
-//         <div id="${response.species.name}_attack"></div>
-//         <div id="${response.species.name}_defense"></div>
-//         <div id="${response.species.name}_spattack"></div>
-//         <div id="${response.species.name}_spdefense"></div>
-//         <div id="${response.species.name}_speed"></div>
-//         <div> id="${response.species.name}_total"</div>
-//     </div>
-//     `
-// }
-
-// function evolutionCategoryTemplate(id, response){
-//     return `
-//     <p>species:</p><p>${response.species.name}</p>
-//     <p>height:</p><p>${response.height} cm</p>
-//     <p>weight:</p><p>${response.weight} kg</p>
-//     <p>abilities:</p><p id="abilities${id}"></p>
-//     `
-// }
-
-// function effectivenessCategoryTemplate(id, response){
-//     return `
-//     <p>species:</p><p>${response.species.name}</p>
-//     <p>height:</p><p>${response.height} cm</p>
-//     <p>weight:</p><p>${response.weight} kg</p>
-//     <p>abilities:</p><p id="abilities${id}"></p>
-//     `
-// }
