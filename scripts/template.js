@@ -31,7 +31,8 @@ function getDialogTemplate(id, pokemon){
               <button onclick="closeDialog()" class="close_btn">Close</button>
         </div>
         <div id="bg_for_img_dialog${id}" class="bg_for_img_dialog">
-            <img class="pokemon_img_dialog" src="${imgUrl + (id)}.gif">
+            <div id="types_in_dialog${id}" class="types_in_dialog"></div>
+            <img class="pokemon_img_dialog" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png">
         </div>
         <div id="types_overlay${id}" class="div_types"></div>
         <div class="categories_dialog">
@@ -39,7 +40,6 @@ function getDialogTemplate(id, pokemon){
             <h3 class="onclick" onclick="switchCategory(event,${id},'about')">About</h3>
             <h3 onclick="switchCategory(event,${id},'stats')">Stats</h3>
             <h3 onclick="switchCategory(event,${id},'evolution')">Evolution</h3>
-            <h3 onclick="switchCategory(event,${id},'effectiveness')">Effectiveness</h3>
             </div>
             <div id="category_content${id}" class="content_categories"></div>
         </div>

@@ -1,4 +1,4 @@
-let limit = 40;
+let limit = 12;
 let offset = 1;
 let openDialog = false;
 let category = "about";
@@ -11,7 +11,7 @@ let pokemonNames = [];
 const baseUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
 // let urlById = `https://pokeapi.co/api/v2/pokemon/${i}/`
 const imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/";
-const originalImg = "https://pokeres.bastionbot.org/images/pokemon/${pokeID}.png"
+// const originalImg = "https://pokeres.bastionbot.org/images/pokemon/${pokeID}.png"
 
 //hier URL für name, types,png https://pokeapi.co/api/v2/pokemon-form/1/
 //Eine allgemeine URL bauen: "https://pokeapi.co/api/v2/${feature}/${i}/" wo feature und id austauschbar sind
@@ -40,9 +40,9 @@ async function fetchData(url) {
   return responseToJson;
 }
 
-function showLoadingSpinner(){
+async function showLoadingSpinner(){
   document.getElementById('loading_spinner').classList.remove('d_none');
-  getFetchResponse();
+  await getFetchResponse();
 }
 
 function removeLoadingSpinner(){
@@ -54,26 +54,39 @@ function renderPokemonData(responseData){
   console.log(pokemonData[responseData.id])
   let contentContainer = document.getElementById("content");
   contentContainer.innerHTML += pokemonCardTemplate(responseData);
-  renderPokemonTypes(responseData);
+  renderPokemonTypes(responseData, `types${responseData.id}`);
 }
 
-function renderPokemonTypes(pokemon){
+function renderPokemonTypes(pokemon, target = `types${pokemon.id}`){
   let typeColors = [];
+  const typeElement = document.getElementById(target);
+
+  if (!typeElement) {
+    console.warn(`Target-Element nicht gefunden: ${target}`);
+    return; // brich ab, wenn das Ziel-Element nicht existiert
+  }
 
   for (let t = 0; t < pokemon.types.length; t++) {
     let type = pokemon.types[t].type.name;
-    let typeId = `${pokemon.id}_${type}`;
+    let typeId = `${pokemon.id}_${type}_${target}`;
 
-    document.getElementById(`types${pokemon.id}`).innerHTML += `<p id="${typeId}">${type}</p>`;
+    // Nur pushern, wenn sinnvoll
     pokemonTypesUrl.push(pokemon.name, pokemon.types[t].type.url);
+    typeElement.innerHTML += `<p id="${typeId}" class="single_type_dialog">${type}</p>`;
+    // dialogIcon.style.backgroundImage = `url('./assets/icons/${type}.svg')`;
+
 
     if (colors[type]) {
       typeColors.push(colors[type]);
-      setTypeBorder(typeId, type); // ⬅ hier wird jedem <p> eine Farbe gegeben
+      setTypeBorder(typeId, type);
     }
   }
 
-  fitColorToType(typeColors, `bg_for_img${pokemon.id}`, `pokemon_card${pokemon.id}`);
+  if (target.startsWith("types_in_dialog")) {
+    fitColorToType(typeColors, `bg_for_img_dialog${pokemon.id}`, `pokemon_dialog${pokemon.id}`);
+  } else {
+    fitColorToType(typeColors, `bg_for_img${pokemon.id}`, `pokemon_card${pokemon.id}`);
+  }
 }
 
 function fitColorToType(typeColors, imageBgId, cardId){
@@ -105,13 +118,13 @@ function setTypeBorder(pTagId, typeName){
   }
 }
 
-function loadMoreData() {
+async function loadMoreData() {
   document.getElementById("load_data_btn").disabled = true;
   if (limit <= 350) {
     console.log("is loading");
     limit += 40;
     offset += 40;
-   showLoadingSpinner();
+   await showLoadingSpinner();
   } 
     document.getElementById("load_data_btn").disabled = false;
 }
@@ -129,15 +142,16 @@ async function renderDialogOverlay(id){
   let dialog = document.getElementById("dialog_overlay");
 
   dialog.innerHTML = getDialogTemplate(id, responseData);
+  renderPokemonTypes(responseData, `types_in_dialog${id}`);
   unableScrolling();
-  let typeColors = [];
-  for (let t = 0; t < responseData.types.length; t++) {
-    let type = responseData.types[t].type.name;
-    if (colors[type]) {
-      typeColors.push(colors[type]);
-    }
-  }
-  fitColorToType(typeColors, `bg_for_img_dialog${id}`, `pokemon_dialog${id}`);
+  // let typeColors = [];
+  // for (let t = 0; t < responseData.types.length; t++) {
+  //   let type = responseData.types[t].type.name;
+  //   if (colors[type]) {
+  //     typeColors.push(colors[type]);
+  //   }
+  // }
+  // fitColorToType(typeColors, `bg_for_img_dialog${id}`, `pokemon_dialog${id}`);
   saveId = id;
   getCategoryContent(id, null);
 }

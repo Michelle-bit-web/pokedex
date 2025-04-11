@@ -8,6 +8,12 @@
   src: url("./assets/font/revalia-v22-latin/revalia-v22-latin-regular.woff2") format("woff2");
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
@@ -22,6 +28,15 @@ body {
   background-color: rgb(0, 0, 0);
   min-height: 100vh;
   font-family: 'revalia-v22-latin-regular';
+}
+
+a{
+  text-decoration: none;
+  color: white;
+}
+
+a:hover{
+  color: red;
 }
 
 .ball_big_circle {
@@ -57,16 +72,18 @@ button {
   font-family: 'revalia-v22-latin-regular';
 }
 
-.content_limitation {
+.content_limitation,
+.content_limitation_impressum {
   width: 100%;
   max-width: 1920px;
-  padding: 24px;
   display: flex;
   flex-direction: column;
 }
 
 .div_logo {
   gap: 8px;
+  padding-left: 24px;
+  padding-top: 16px;
 }
 
 .logo{
@@ -80,7 +97,6 @@ header {
   position: sticky;
   top: 0;
   height: 150px;
-  padding: 0 24px;
   font-family: "Pokemon Solid";
   font-size: 40px;
   z-index: 1002;
@@ -101,10 +117,30 @@ footer {
   display: flex;
   align-items: center;
   margin-top: auto;
+  padding-left: 24px;
+}
+
+.creator{
+  margin-top: 8px;
+}
+
+.impressum a{
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.impressum a:hover{
+  color:red;
+}
+
+.logo_text_impressum a:hover{
+  color:red;
+  cursor: pointer;
 }
 
 section {
-  margin-top: 50px;
+  padding: 32px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -126,7 +162,7 @@ section {
   align-items: center;
  
   height: 250px;
-  width: 150px;
+  width: 250px;
   background-color: rgb(26, 25, 25);
   background: linear-gradient(180deg, rgb(26, 25, 25), rgb(99, 79, 79));
   border: 2px solid white;
@@ -249,17 +285,28 @@ margin-top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .pokemon_img_dialog {
   height: 130px;
   width: 150px;
   margin-bottom: -40px;
-  margin-right: -150px;
+  margin-right: -130px;
+  position: relative;
 }
 
 .pokemon_img_dialog:hover {
   scale: 1.2;
+}
+
+.types_in_dialog{
+  position: absolute;
+  top:10px;
+  left:-15px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .categories_dialog {
@@ -268,7 +315,7 @@ margin-top: 0;
   border-radius: 10px;
   height: 50%;
   margin-top: 16px;
-  width: 100%;
+  width: 98%;
 }
 
 .category_titles_dialog {
@@ -277,6 +324,11 @@ margin-top: 0;
   gap: 12px;
   color: grey;
   font-size: 10px;
+}
+
+.single_type_dialog{
+background-position: center;
+background-size: cover;
 }
 
 .dialog_id {
@@ -448,6 +500,52 @@ h3:hover {
   border-radius: 10px;
 }
 
+.div_to_main_page{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: -20px;
+  min-width: 100%;
+}
+
+.to_main_page{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: rgba(112, 111, 111, 0.77);
+  text-decoration: none;
+  height: 50px;
+  width: 25%;
+  min-width: 250px;
+  border: 3px solid;
+  border-radius: 20px;
+  font-family: 'revalia-v22-latin-regular';
+  text-align: center;
+  font-size: 16px;
+  border-color: light-dark(rgb(219, 45, 45), rgb(243, 8, 8));
+}
+
+.div_to_main_page:hover{
+  cursor: pointer;
+}
+
+.to_main_page:hover{
+  background-color: rgb(244, 215, 215);
+  cursor: pointer;
+}
+
+.content_impressum{
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  margin: 0;
+ word-break: break-all;
+}
+
 /*pokeball as load button*/
 
 .ball_big_circle_load {
@@ -502,7 +600,7 @@ h3:hover {
 }
 
 /* Backgroundcolors for types */
-.bug {
+/* .bug {
   background: linear-gradient(195deg, #2b1b12, #91a119);
 }
 .flying {
@@ -552,11 +650,11 @@ h3:hover {
 }
 .ghost {
   background: linear-gradient(195deg, #2b1b12, #704170);
-}
+} */
 
 @media(max-width: 670px){
   .search_input {
-    height: 30px;
+   height: 30px;
    margin-top: 16px;
   }
   .pokemon_card {
@@ -572,11 +670,74 @@ h3:hover {
   .pokemon_img{
     max-height: 90px;
   }
+  .to_main_page{
+    height: 30px;
+    margin-top: 16px;
+    font-size: 12px;
+  }
+  .dialog_overlay {
+    width: 100%;
+    height: 100vh;
+    max-width: 1920px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .pokemon_card_dialog {
+    height: 80%;
+    width: 250px;
+  }
+  .dialog_name {
+    font-size: 24px;
+  }
+  .content_categories {
+    padding: 12px;
+  }
+  .stat_values{
+    height: 4px;
+    width: 120px;
+    border-radius: 10px;
+  }
+  .div_navigation_btn {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    width: auto;
+    min-width: 200px;
+  }
+  .bg_for_img_dialog {
+    background-color: black;
+    background: linear-gradient(195deg, #2b1b12, #f73b7d);
+    width: 150px;
+    height:150px;
+  }
+  .categories_dialog {
+    font-size: 12px;
+  }
+  .category_titles_dialog {
+    display: flex;
+    font-size: 12px;
+    gap: 12px;
+    color: grey;
+    font-size: 10px;
+  }
+ 
+@media(max-width:550px){
+  .content_impressum a{
+    font-size: 12px;
+  }
 }
 
 @media(max-width: 470px){
   .content_limitation {
     padding: 16px;
+  }
+  .content_impressum{
+    font-size: 12px;
+  }
+  .content_impressum a{
+    font-size: 10px;
   }
   .pokemon_card {
     font-size: 10px;
