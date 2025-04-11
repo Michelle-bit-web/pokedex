@@ -1,4 +1,4 @@
-let limit = 8;
+let limit = 40;
 let offset = 1;
 let openDialog = false;
 let category = "about";
@@ -11,6 +11,7 @@ let pokemonNames = [];
 const baseUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
 // let urlById = `https://pokeapi.co/api/v2/pokemon/${i}/`
 const imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/";
+const originalImg = "https://pokeres.bastionbot.org/images/pokemon/${pokeID}.png"
 
 //hier URL für name, types,png https://pokeapi.co/api/v2/pokemon-form/1/
 //Eine allgemeine URL bauen: "https://pokeapi.co/api/v2/${feature}/${i}/" wo feature und id austauschbar sind

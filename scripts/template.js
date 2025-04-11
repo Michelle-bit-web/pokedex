@@ -44,8 +44,8 @@ function getDialogTemplate(id, pokemon){
             <div id="category_content${id}" class="content_categories"></div>
         </div>
         <div class="div_navigation_btn">
-            <button onclick="navigateDialog(${id}, -1)" class="navigation_btn">left</button>
-            <button onclick="navigateDialog(${id}, 1)" class="navigation_btn">right</button>
+            <button onclick="navigateDialog(${id}, -1)" class="navigation_btn">back</button>
+            <button onclick="navigateDialog(${id}, 1)" class="navigation_btn">next</button>
         </div>
     </div>
   `

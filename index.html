@@ -10,18 +10,18 @@
     <title>Pokedex</title>
   </head>
   <body onload="init()">
-    <div class="content_limitation">
-      <header>
+    <header>
+      <div class="content_limitation">
         <div class="div_logo">
-          <div>Pokedex</div>
-          <div class="div_pokeball">
-            <div class="ball_big_circle">
+          <div class="logo">
+            <div>Pokedex</div>
+            <div class="div_pokeball">
+              <div class="ball_big_circle">
               <div class="ball_line"></div>
               <div class="ball_small_circle"></div>
             </div>
+           </div>
           </div>
-        </div>
-        <div>
           <div class="div_search">
             <label for="search"></label>
             <input
@@ -34,7 +34,9 @@
             <div id="search_suggestion" class="search_suggestion d_none"></div>
           </div>
         </div>
-      </header>
+          
+    </header>
+    <div class="content_limitation">
       <section>
         <div id="content" class="content">
           <div id="dialog_overlay" class="dialog_overlay d_none" onclick="closeDialog()"></div>
@@ -51,7 +53,12 @@
           </div>
         </button>
       </section>
-      <footer>Impressum</footer>
     </div>
+    <footer>
+      <div class="content_limitation">
+        <div class="impressum">Impressum</div>
+        <div class="creator">Created by Michelle Puschkarow</div>
+      </div>
+    </footer>
   </body>
 </html>
