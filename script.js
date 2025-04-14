@@ -19,7 +19,7 @@ function init() {
 }
 
 async function showLoadingSpinner() {
-  document.getElementById("loading_spinner").classList.remove("d_none")
+  document.getElementById("loading_spinner").classList.remove("d_none");
 }
 
 function removeLoadingSpinner() {
@@ -165,11 +165,11 @@ async function renderDialogOverlay(id, passedCategory) {
   isLoadingDialog = false;
 }
 
-function getGeneralUrl(id){
-  return  `https://pokeapi.co/api/v2/pokemon/${id}/`;
+function getGeneralUrl(id) {
+  return `https://pokeapi.co/api/v2/pokemon/${id}/`;
 }
 
-function updateDialogOverlay(id, responseData){
+function updateDialogOverlay(id, responseData) {
   let dialog = document.getElementById("dialog_overlay");
   dialog.innerHTML = getDialogTemplate(id, responseData);
   renderPokemonTypes(responseData, `types_in_dialog${id}`);
@@ -211,10 +211,10 @@ async function navigateDialog(currentId, direction) {
 
 async function checkCategory(newId, category) {
   renderDialogOverlay(newId, category).then(() => {
-    let h3Elements = document.querySelectorAll(".category_titles_dialog h3");
-    h3Elements.forEach((h3) => {
-      if (h3.textContent.toLowerCase() === category) {
-        switchCategory({ target: h3 }, newId, category);
+    let categoryTitle = document.querySelectorAll(".category_titles_dialog h3");
+    categoryTitle.forEach((title) => {
+      if (title.textContent.toLowerCase() === category) {
+        switchCategory({ target: title }, newId, category);
       }
     });
   });
@@ -301,13 +301,13 @@ function getEvolutionIds(chain) {
   const further = chain.chain.evolves_to[0]?.evolves_to[0]?.species?.name;
   if (next) names.push(next);
   if (further) names.push(further);
-  return names.map(name => nameToId[name]).filter(id => id !== undefined);
+  return names.map((name) => nameToId[name]).filter((id) => id !== undefined);
 }
 
 function renderEvolutionImages(chainIds, id) {
   const container = document.getElementById(`category_content${id}`);
   container.innerHTML = "";
-  chainIds.forEach(evoId => {
+  chainIds.forEach((evoId) => {
     container.innerHTML += `<img class="evolution_img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evoId}.png">`;
   });
 }
@@ -324,13 +324,13 @@ async function searchPokemon() {
   showSuggestions(filteredResults);
 }
 
-async function getFilteredPokemon(input){
+async function getFilteredPokemon(input) {
   const response = await fetch(baseUrl);
   const data = await response.json();
   return data.results.filter((pokemon) => pokemon.name.startsWith(input));
 }
 
-function showSuggestions(filteredResults){
+function showSuggestions(filteredResults) {
   if (filteredResults.length > 0) {
     searchSuggestion.classList.remove("d_none");
     filteredResults.forEach((pokemon) => {
