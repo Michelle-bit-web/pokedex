@@ -316,7 +316,7 @@ async function searchPokemon() {
     return;
   }
   const filteredResults = await getFilteredPokemon(input);
-  showSuggestions(filteredResults);
+  showSuggestions(filteredResults, searchSuggestion);
 }
 
 async function getFilteredPokemon(input) {
@@ -325,7 +325,7 @@ async function getFilteredPokemon(input) {
   return data.results.filter((pokemon) => pokemon.name.startsWith(input));
 }
 
-function showSuggestions(filteredResults) {
+function showSuggestions(filteredResults, searchSuggestion) {
   if (filteredResults.length > 0) {
     searchSuggestion.classList.remove("d_none");
     filteredResults.forEach((pokemon) => {
