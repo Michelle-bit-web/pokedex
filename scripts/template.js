@@ -48,7 +48,7 @@ function aboutCategoryTemplate(id, response) {
     <div class="about_content">
         <p class="about_group">Species: </p>
         <div>
-            ${response.species.name}
+            ${capitalizeFirstLetter(response.species.name)}
         </div>
     </div>
     <div class="about_content">
@@ -60,7 +60,7 @@ function aboutCategoryTemplate(id, response) {
     <div class="about_content">
         <p class="about_group">Weight:</p>
         <div>
-            ${response.weight} kg
+            ${(response.weight/10)} kg
         </div>
     </div>
     <div class="about_content">

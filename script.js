@@ -142,7 +142,7 @@ async function loadMoreData() {
   if (limit <= 1000) {
     limit += 40;
     offset += 40;
-    await showLoadingSpinner();
+    await getFetchResponse();
   }
   document.getElementById("load_data_btn").disabled = false;
 }
@@ -329,7 +329,7 @@ function showSuggestions(filteredResults, searchSuggestion) {
   if (filteredResults.length > 0) {
     searchSuggestion.classList.remove("d_none");
     filteredResults.forEach((pokemon) => {
-      searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemonByUrl('${pokemon.url}')">${pokemon.name}</span>`;
+      searchSuggestion.innerHTML += `<span class="suggested_pokename" onclick="getSuggestedPokemonByUrl('${pokemon.url}')">${capitalizeFirstLetter(pokemon.name)}</span>`;
     });
   } else {
     searchSuggestion.classList.remove("d_none");
