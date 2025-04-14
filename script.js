@@ -14,12 +14,11 @@ const baseUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
 const imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/";
 
 function init() {
-  showLoadingSpinner();
+  getFetchResponse();
 }
 
 async function showLoadingSpinner() {
-  document.getElementById("loading_spinner").classList.remove("d_none");
-  await getFetchResponse();
+  document.getElementById("loading_spinner").classList.remove("d_none")
 }
 
 function removeLoadingSpinner() {
@@ -27,6 +26,7 @@ function removeLoadingSpinner() {
 }
 
 async function getFetchResponse() {
+  showLoadingSpinner();
   const promises = [];
   for (let i = offset; i <= limit; i++) {
     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
