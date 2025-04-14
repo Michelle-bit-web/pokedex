@@ -86,6 +86,7 @@ button {
 
 .content{
   padding: 0 24px;
+  margin-top: 150px;
 }
 
 .div_logo {
@@ -239,7 +240,7 @@ section {
   position: fixed;
   width: 100%;
   top: 150px;
-  height: calc(100vh - 160px);
+  height: calc(100vh - 150px);
   max-width: 1920px;
   display: flex;
   justify-content: center;

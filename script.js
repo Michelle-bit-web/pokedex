@@ -7,7 +7,6 @@ let currentPokemonIds = [];
 let idToName = {};
 let nameToId = {};
 let pokemonData = [];
-// let pokemonTypesUrl = [];
 let pokemonNames = [];
 let evolutionChain = [];
 let evolutionChainNames = [];
@@ -79,7 +78,6 @@ function renderPokemonTypes(pokemon, target = `types${pokemon.id}`){
   for (let t = 0; t < pokemon.types.length; t++) {
     let type = pokemon.types[t].type.name;
     let typeId = `${pokemon.id}_${type}_${target}`;
-    // pokemonTypesUrl.push(pokemon.name, pokemon.types[t].type.url);
     typeElement.innerHTML += `<p id="${typeId}" class="single_type_dialog">${type}</p>`;
     if (colors[type]) {
       typeColors.push(colors[type]);
