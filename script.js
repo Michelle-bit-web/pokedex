@@ -33,7 +33,7 @@ async function getFetchResponse() {
     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
     promises.push(fetchData(generalUrl));
   }
-  catchError(promises);
+  await catchError(promises);
   removeLoadingSpinner();
 }
 
