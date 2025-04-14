@@ -18,8 +18,8 @@ function getDialogTemplate(id, pokemon) {
   return `
     <div id="pokemon_dialog${id}" class="pokemon_card_dialog" onclick="event.stopPropagation()">
         <div class="dialog_top_content">
-                  <p class="dialog_id">#${id}</p>
-                  <p class="dialog_name">${capitalizeFirstLetter(pokemon.species.name)}</p>
+                <p class="dialog_id">#${id}</p>
+                <p class="dialog_name">${capitalizeFirstLetter(pokemon.species.name)}</p>
               <button onclick="closeDialog()" class="close_btn">Close</button>
         </div>
         <div id="bg_for_img_dialog${id}" class="bg_for_img_dialog">
