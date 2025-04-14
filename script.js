@@ -195,15 +195,10 @@ function closeDialog() {
 
 async function navigateDialog(currentId, direction) {
   if (isLoadingDialog) return;
-  let currentIndex = currentPokemonIds.indexOf(currentId);
-  let newIndex = currentIndex + direction;
-  if (newIndex >= currentPokemonIds.length) {
-    newIndex = 0;
-  }
-  if (newIndex < 0) {
-    newIndex = currentPokemonIds.length - 1;
-  }
-  let newId = currentPokemonIds[newIndex];
+  const getWrappedIndex = (index, length) => (index >= length ? 0 : index < 0 ? length - 1 : index);
+  const currentIndex = currentPokemonIds.indexOf(currentId);
+  const newIndex = getWrappedIndex(currentIndex + direction, currentPokemonIds.length);
+  const newId = currentPokemonIds[newIndex];
   saveId = newId;
   await renderDialogOverlay(newId, category);
   await checkCategory(newId, category);
@@ -222,8 +217,8 @@ async function checkCategory(newId, category) {
 
 function switchCategory(event, id, selectedCategory) {
   let categoryTitles = document.querySelectorAll(".category_titles_dialog h3");
-  categoryTitles.forEach((h3) => {
-    h3.classList.remove("onclick");
+  categoryTitles.forEach((title) => {
+    title.classList.remove("onclick");
   });
   event.target.classList.add("onclick");
   category = selectedCategory;
