@@ -4,13 +4,10 @@ let openDialog = false;
 let category = "about";
 let saveId;
 let currentPokemonIds = [];
-
 let idToName = {};
 let nameToId = {};
-
 let pokemonData = [];
-let pokemonTypesData = [];
-let pokemonTypesUrl = [];
+// let pokemonTypesUrl = [];
 let pokemonNames = [];
 let evolutionChain = [];
 let evolutionChainNames = [];
@@ -21,38 +18,38 @@ function init() {
   showLoadingSpinner();
 }
 
+async function showLoadingSpinner(){
+  document.getElementById('loading_spinner').classList.remove('d_none');
+  await getFetchResponse();
+}
+
+function removeLoadingSpinner(){
+  document.getElementById('loading_spinner').classList.add('d_none');
+}
+
 async function getFetchResponse() {
   const promises = [];
-
   for (let i = offset; i <= limit; i++) {
     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
     promises.push(fetchData(generalUrl));
-  }
-
-  try {
-    const results = await Promise.all(promises);
-    results.forEach(responseData => {
-      if (responseData) {
-        currentPokemonIds.push(responseData.id);
-        renderPokemonData(responseData);
-      }
-    });
-  } catch (error) {
-    console.error("Fehler beim parallelen Abrufen:", error);
-  }
-
+  };
+  catchError(promises);
   removeLoadingSpinner();
 }
-// async function getFetchResponse(){
-  
-//   for (let i = offset; i <= limit; i++) {
-//     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
-//     const responseData = await fetchData(generalUrl);
-//     currentPokemonIds.push(responseData.id);
-//     renderPokemonData(responseData);
-//   }
-//   removeLoadingSpinner();
-// }
+
+async function catchError(promises){
+try {
+  const results = await Promise.all(promises);
+  results.forEach(responseData => {
+    if (responseData) {
+      currentPokemonIds.push(responseData.id);
+      renderPokemonData(responseData);
+    }
+  });
+} catch (error) {
+  console.error("Fehler beim parallelen Abrufen:", error);
+}
+}
 
 async function fetchData(url) {
   try{
@@ -67,15 +64,6 @@ async function fetchData(url) {
    }
 }
 
-async function showLoadingSpinner(){
-  document.getElementById('loading_spinner').classList.remove('d_none');
-  await getFetchResponse();
-}
-
-function removeLoadingSpinner(){
-  document.getElementById('loading_spinner').classList.add('d_none');
-}
-
 function renderPokemonData(responseData){
   pokemonData[responseData.id] = responseData;
   let contentContainer = document.getElementById("content");
@@ -83,7 +71,6 @@ function renderPokemonData(responseData){
   renderPokemonTypes(responseData, `types${responseData.id}`);
   idToName[responseData.id] = responseData.name;
   nameToId[responseData.name] = responseData.id;
-  console.log(idToName, nameToId);//Darin jetzt Objekte mit name & id
 }
 
 function renderPokemonTypes(pokemon, target = `types${pokemon.id}`){
@@ -92,7 +79,7 @@ function renderPokemonTypes(pokemon, target = `types${pokemon.id}`){
   for (let t = 0; t < pokemon.types.length; t++) {
     let type = pokemon.types[t].type.name;
     let typeId = `${pokemon.id}_${type}_${target}`;
-    pokemonTypesUrl.push(pokemon.name, pokemon.types[t].type.url);
+    // pokemonTypesUrl.push(pokemon.name, pokemon.types[t].type.url);
     typeElement.innerHTML += `<p id="${typeId}" class="single_type_dialog">${type}</p>`;
     if (colors[type]) {
       typeColors.push(colors[type]);
@@ -189,7 +176,6 @@ function navigateDialog(currentId, direction) {
     saveId = newId;
     renderDialogOverlay(newId, category);
     renderDialogOverlay(newId, category).then(() => {
-      // Finde den H3-Tab zur aktuellen Kategorie
       let h3Elements = document.querySelectorAll(".category_titles_dialog h3");
       h3Elements.forEach(h3 => {
         if (h3.textContent.toLowerCase() === category) {
@@ -214,21 +200,13 @@ function navigateDialog(currentId, direction) {
     } else {
       category = categoryTitle;
     }
-  
     try {
       let categoryData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}/`);
       let getName = categoryData.name;
-  
       let evolutionName = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${getName}/`);
-      console.log(`Das ist die Evol-Chain-Nr.: ${evolutionName.evolution_chain.url}`); // Die nötige URL je nach Name
-  
       let evolutionData = await fetchData(`${evolutionName.evolution_chain.url}`);
-      console.log(evolutionName.evolves_from_species);
-      console.log(evolutionData);
-  
       evolutionChain = evolutionData;
       setCategoryTemplate(categoryData, id, categoryTitle);
-  
     } catch (error) {
       document.getElementById(`category_content${id}`).innerHTML = "";
       console.error("Fehler beim Abrufen der Daten:", error);
@@ -267,37 +245,21 @@ function loadStatsData(categoryData, id){
 }
 
 async function loadEvolutionData(id){
-  let evolutionChainId = evolutionChain.id;
   let currentChain = evolutionChain.chain.species.name;
   let nextEvolutionChain = evolutionChain.chain.evolves_to[0]?.species?.name;
   let furtherEvolutionChain = evolutionChain.chain.evolves_to[0]?.evolves_to[0]?.species?.name;
-
-  // Array mit allen vorkommenden Namen der Chain
   let chainNames = [currentChain];
   if (nextEvolutionChain) chainNames.push(nextEvolutionChain);
   if (furtherEvolutionChain) chainNames.push(furtherEvolutionChain);
-
-  // IDs aus Namen ziehen
   let chainIds = chainNames.map(name => nameToId[name]).filter(id => id !== undefined);
-
-  // Bilder rendern
   let container = document.getElementById(`category_content${id}`);
-  container.innerHTML = ""; // Leeren oder optional ergänzen
+  container.innerHTML = "";
   chainIds.forEach(evoId => {
     container.innerHTML += `
       <img class="evolution_img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evoId}.png">
     `;
   });
-
-  // Optional: Speichern, falls du das später brauchst
-  evolutionChainNames = [{
-    evolutionChainId,
-    currentChain,
-    nextEvolutionChain,
-    furtherEvolutionChain
-  }];
 }
-
 
 async function searchPokemon() {
   let input = document.getElementById('search').value.toLowerCase();
@@ -307,8 +269,7 @@ async function searchPokemon() {
     searchSuggestion.classList.add('d_none');
     return;
   }
-  const allDataUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0";
-  const response = await fetch(allDataUrl);
+  const response = await fetch(baseUrl);
   const data = await response.json();
   const filteredResults = data.results.filter(pokemon => pokemon.name.startsWith(input));
   if (filteredResults.length > 0) {
