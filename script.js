@@ -21,15 +21,38 @@ function init() {
   showLoadingSpinner();
 }
 
-async function getFetchResponse(){
+async function getFetchResponse() {
+  const promises = [];
+
   for (let i = offset; i <= limit; i++) {
     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
-    const responseData = await fetchData(generalUrl);
-    currentPokemonIds.push(responseData.id);
-    renderPokemonData(responseData);
+    promises.push(fetchData(generalUrl));
   }
+
+  try {
+    const results = await Promise.all(promises);
+    results.forEach(responseData => {
+      if (responseData) {
+        currentPokemonIds.push(responseData.id);
+        renderPokemonData(responseData);
+      }
+    });
+  } catch (error) {
+    console.error("Fehler beim parallelen Abrufen:", error);
+  }
+
   removeLoadingSpinner();
 }
+// async function getFetchResponse(){
+  
+//   for (let i = offset; i <= limit; i++) {
+//     let generalUrl = `https://pokeapi.co/api/v2/pokemon/${i}/`;
+//     const responseData = await fetchData(generalUrl);
+//     currentPokemonIds.push(responseData.id);
+//     renderPokemonData(responseData);
+//   }
+//   removeLoadingSpinner();
+// }
 
 async function fetchData(url) {
   try{
