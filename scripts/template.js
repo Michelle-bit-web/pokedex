@@ -54,7 +54,7 @@ function aboutCategoryTemplate(id, response) {
     <div class="about_content">
         <p class="about_group">Height: </p>
         <div>
-            ${response.height} cm
+            ${(response.height*10)} cm
         </div>
     </div>
     <div class="about_content">
