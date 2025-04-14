@@ -1,6 +1,7 @@
 let limit = 40;
 let offset = 1;
 let openDialog = false;
+let isLoadingDialog = false;
 let category = "about";
 let saveId;
 let currentPokemonIds = [];
@@ -77,19 +78,37 @@ function renderPokemonData(responseData) {
 function renderPokemonTypes(pokemon, target = `types${pokemon.id}`) {
   let typeColors = [];
   const typeElement = document.getElementById(target);
-  for (let t = 0; t < pokemon.types.length; t++) {
-    let type = pokemon.types[t].type.name;
-    let typeId = `${pokemon.id}_${type}_${target}`;
-    typeElement.innerHTML += `<p id="${typeId}" class="single_type_dialog">${type}</p>`;
-    if (colors[type]) {
-      typeColors.push(colors[type]);
-      setTypeBorder(typeId, type);
-    }
+
+  pokemon.types.forEach((typeInfo) => {
+    const type = typeInfo.type.name;
+    const typeId = getTypeElementId(pokemon.id, type, target);
+    typeElement.innerHTML += getTypeElementHTML(typeId, type);
+    applyTypeStyle(typeId, type, typeColors);
+  });
+
+  applyTypeColors(target, typeColors, pokemon.id);
+}
+
+function getTypeElementId(id, type, target) {
+  return `${id}_${type}_${target}`;
+}
+
+function getTypeElementHTML(id, type) {
+  return `<p id="${id}" class="single_type_dialog">${type}</p>`;
+}
+
+function applyTypeStyle(id, type, typeColors) {
+  if (colors[type]) {
+    typeColors.push(colors[type]);
+    setTypeBorder(id, type);
   }
+}
+
+function applyTypeColors(target, typeColors, id) {
   if (target.startsWith("types_in_dialog")) {
-    fitColorToType(typeColors, `bg_for_img_dialog${pokemon.id}`, `pokemon_dialog${pokemon.id}`);
+    fitColorToType(typeColors, `bg_for_img_dialog${id}`, `pokemon_dialog${id}`);
   } else {
-    fitColorToType(typeColors, `bg_for_img${pokemon.id}`, `pokemon_card${pokemon.id}`);
+    fitColorToType(typeColors, `bg_for_img${id}`, `pokemon_card${id}`);
   }
 }
 
@@ -137,14 +156,24 @@ function openDialogOverlay(id) {
 }
 
 async function renderDialogOverlay(id, passedCategory) {
+  if (isLoadingDialog) return;
+  isLoadingDialog = true;
   saveId = id;
-  let generalUrl = `https://pokeapi.co/api/v2/pokemon/${id}/`;
-  const responseData = await fetchData(generalUrl);
+  const responseData = await fetchData(getGeneralUrl(id));
+  updateDialogOverlay(id, responseData);
+  await getCategoryContent(id, passedCategory);
+  isLoadingDialog = false;
+}
+
+function getGeneralUrl(id){
+  return  `https://pokeapi.co/api/v2/pokemon/${id}/`;
+}
+
+function updateDialogOverlay(id, responseData){
   let dialog = document.getElementById("dialog_overlay");
   dialog.innerHTML = getDialogTemplate(id, responseData);
   renderPokemonTypes(responseData, `types_in_dialog${id}`);
   unableScrolling();
-  getCategoryContent(id, passedCategory);
 }
 
 function unableScrolling() {
@@ -164,7 +193,8 @@ function closeDialog() {
   enableScrolling();
 }
 
-function navigateDialog(currentId, direction) {
+async function navigateDialog(currentId, direction) {
+  if (isLoadingDialog) return;
   let currentIndex = currentPokemonIds.indexOf(currentId);
   let newIndex = currentIndex + direction;
   if (newIndex >= currentPokemonIds.length) {
@@ -175,11 +205,11 @@ function navigateDialog(currentId, direction) {
   }
   let newId = currentPokemonIds[newIndex];
   saveId = newId;
-  renderDialogOverlay(newId, category);
-  checkCategory(newId, category);
+  await renderDialogOverlay(newId, category);
+  await checkCategory(newId, category);
 }
 
-function checkCategory(newId, category) {
+async function checkCategory(newId, category) {
   renderDialogOverlay(newId, category).then(() => {
     let h3Elements = document.querySelectorAll(".category_titles_dialog h3");
     h3Elements.forEach((h3) => {
@@ -201,25 +231,33 @@ function switchCategory(event, id, selectedCategory) {
 }
 
 async function getCategoryContent(id, categoryTitle) {
-  if (categoryTitle == null) {
-    categoryTitle = category;
-  } else {
-    category = categoryTitle;
-  }
+  if (categoryTitle == null) categoryTitle = category;
+  else category = categoryTitle;
+
   try {
-    let categoryData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}/`);
-    let getName = categoryData.name;
-    let evolutionName = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${getName}/`);
-    let evolutionData = await fetchData(`${evolutionName.evolution_chain.url}`);
-    evolutionChain = evolutionData;
+    const categoryData = await fetchCategoryData(id);
+    await processEvolutionData(categoryData);
     setCategoryTemplate(categoryData, id, categoryTitle);
   } catch (error) {
-    document.getElementById(`category_content${id}`).innerHTML = "";
-    console.error("Fehler beim Abrufen der Daten:", error);
-    document.getElementById(
-      `category_content${id}`
-    ).innerHTML += `No more data available. Please try a different related pokémon name.`;
+    showCategoryError(id, error);
   }
+}
+
+async function fetchCategoryData(id) {
+  return await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}/`);
+}
+
+async function processEvolutionData(categoryData) {
+  const getName = categoryData.name;
+  const evolutionName = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${getName}/`);
+  const evolutionData = await fetchData(evolutionName.evolution_chain.url);
+  evolutionChain = evolutionData;
+}
+
+function showCategoryError(id, error) {
+  console.error("Fehler beim Abrufen der Daten:", error);
+  const container = document.getElementById(`category_content${id}`);
+  container.innerHTML = `No more data available. Please try a different related pokémon name.`;
 }
 
 async function setCategoryTemplate(categoryData, id, currentCategory) {
@@ -253,19 +291,24 @@ function loadStatsData(categoryData, id) {
 }
 
 async function loadEvolutionData(id) {
-  let currentChain = evolutionChain.chain.species.name;
-  let nextEvolutionChain = evolutionChain.chain.evolves_to[0]?.species?.name;
-  let furtherEvolutionChain = evolutionChain.chain.evolves_to[0]?.evolves_to[0]?.species?.name;
-  let chainNames = [currentChain];
-  if (nextEvolutionChain) chainNames.push(nextEvolutionChain);
-  if (furtherEvolutionChain) chainNames.push(furtherEvolutionChain);
-  let chainIds = chainNames.map((name) => nameToId[name]).filter((id) => id !== undefined);
-  let container = document.getElementById(`category_content${id}`);
+  const chainIds = getEvolutionIds(evolutionChain);
+  renderEvolutionImages(chainIds, id);
+}
+
+function getEvolutionIds(chain) {
+  const names = [chain.chain.species.name];
+  const next = chain.chain.evolves_to[0]?.species?.name;
+  const further = chain.chain.evolves_to[0]?.evolves_to[0]?.species?.name;
+  if (next) names.push(next);
+  if (further) names.push(further);
+  return names.map(name => nameToId[name]).filter(id => id !== undefined);
+}
+
+function renderEvolutionImages(chainIds, id) {
+  const container = document.getElementById(`category_content${id}`);
   container.innerHTML = "";
-  chainIds.forEach((evoId) => {
-    container.innerHTML += `
-      <img class="evolution_img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evoId}.png">
-    `;
+  chainIds.forEach(evoId => {
+    container.innerHTML += `<img class="evolution_img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evoId}.png">`;
   });
 }
 
@@ -277,9 +320,17 @@ async function searchPokemon() {
     searchSuggestion.classList.add("d_none");
     return;
   }
+  const filteredResults = await getFilteredPokemon(input);
+  showSuggestions(filteredResults);
+}
+
+async function getFilteredPokemon(input){
   const response = await fetch(baseUrl);
   const data = await response.json();
-  const filteredResults = data.results.filter((pokemon) => pokemon.name.startsWith(input));
+  return data.results.filter((pokemon) => pokemon.name.startsWith(input));
+}
+
+function showSuggestions(filteredResults){
   if (filteredResults.length > 0) {
     searchSuggestion.classList.remove("d_none");
     filteredResults.forEach((pokemon) => {
