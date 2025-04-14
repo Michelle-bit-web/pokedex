@@ -1,13 +1,19 @@
-let limit = 12;
+let limit = 40;
 let offset = 1;
 let openDialog = false;
 let category = "about";
 let saveId;
 let currentPokemonIds = [];
+
+let idToName = {};
+let nameToId = {};
+
 let pokemonData = [];
 let pokemonTypesData = [];
 let pokemonTypesUrl = [];
 let pokemonNames = [];
+let evolutionChain = [];
+let evolutionChainNames = [];
 const baseUrl = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
 const imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/";
 
@@ -23,14 +29,19 @@ async function getFetchResponse(){
     renderPokemonData(responseData);
   }
   removeLoadingSpinner();
-  console.log(`Pokemon-Ids auf dieser Seite: ${currentPokemonIds}`);
 }
 
 async function fetchData(url) {
-  const response = await fetch(`${url}`);
-  let responseToJson = await response.json();
-  pokemonNames.push(responseToJson.name);
-  return responseToJson;
+  try{
+    const response = await fetch(`${url}`);
+    let responseToJson = await response.json();
+    pokemonNames.push(responseToJson.name);
+    return responseToJson;
+  } catch (error) {
+      document.getElementById(`category_content${id}`).innerHTML = "";
+      console.error("Fehler beim Abrufen der Daten:", error);
+      document.getElementById(`category_content${id}`).innerHTML += `No more data available. Please try a different related pokémon name.`;
+   }
 }
 
 async function showLoadingSpinner(){
@@ -47,15 +58,14 @@ function renderPokemonData(responseData){
   let contentContainer = document.getElementById("content");
   contentContainer.innerHTML += pokemonCardTemplate(responseData);
   renderPokemonTypes(responseData, `types${responseData.id}`);
+  idToName[responseData.id] = responseData.name;
+  nameToId[responseData.name] = responseData.id;
+  console.log(idToName, nameToId);//Darin jetzt Objekte mit name & id
 }
 
 function renderPokemonTypes(pokemon, target = `types${pokemon.id}`){
   let typeColors = [];
   const typeElement = document.getElementById(target);
-  if (!typeElement) {
-    console.warn(`Target-Element nicht gefunden: ${target}`);
-    return; 
-  }
   for (let t = 0; t < pokemon.types.length; t++) {
     let type = pokemon.types[t].type.name;
     let typeId = `${pokemon.id}_${type}_${target}`;
@@ -79,15 +89,12 @@ function fitColorToType(typeColors, imageBgId, cardId){
   if (!imageBg || !card || !typeColors.length) return;
   if (typeColors.length === 1) {
     imageBg.style.background = typeColors[0];
-    card.style.border = `3px solid ${typeColors[0]}`;
-    card.style.setProperty('--hoverColor', typeColors[0]);
   } else {
     const gradient = `linear-gradient(135deg, ${typeColors[0]}, ${typeColors[1]})`;
-    imageBg.style.background = gradient;
-    card.style.border = `3px solid ${typeColors[0]}`;
-    card.style.backgroundClip = "padding-box";
-    card.style.setProperty('--hoverColor', typeColors[0]);
+    imageBg.style.background = gradient; 
   }
+  card.style.border = `3px solid ${typeColors[0]}`;
+  card.style.setProperty('--hoverColor', typeColors[0]);
 }
 
 function setTypeBorder(pTagId, typeName){
@@ -118,7 +125,7 @@ function openDialogOverlay(id) {
   renderDialogOverlay(id)
 }
 
-async function renderDialogOverlay(id){
+async function renderDialogOverlay(id, passedCategory){
   saveId = id;
   let generalUrl = `https://pokeapi.co/api/v2/pokemon/${id}/`;
   const responseData = await fetchData(generalUrl);
@@ -126,7 +133,7 @@ async function renderDialogOverlay(id){
   dialog.innerHTML = getDialogTemplate(id, responseData);
   renderPokemonTypes(responseData, `types_in_dialog${id}`);
   unableScrolling();
-  getCategoryContent(id, null);
+  getCategoryContent(id, passedCategory);
 }
 
 function unableScrolling() {
@@ -157,53 +164,117 @@ function navigateDialog(currentId, direction) {
     }
     let newId = currentPokemonIds[newIndex];
     saveId = newId;
-    renderDialogOverlay(newId);
+    renderDialogOverlay(newId, category);
+    renderDialogOverlay(newId, category).then(() => {
+      // Finde den H3-Tab zur aktuellen Kategorie
+      let h3Elements = document.querySelectorAll(".category_titles_dialog h3");
+      h3Elements.forEach(h3 => {
+        if (h3.textContent.toLowerCase() === category) {
+          switchCategory({ target: h3 }, newId, category);
+        }
+      });
+    });
   }
 
-  function switchCategory(event, id, category){
+  function switchCategory(event, id, selectedCategory){
     let categoryTitles = document.querySelectorAll(".category_titles_dialog h3");
     categoryTitles.forEach(h3 => {
-      h3.classList.remove('onclick');});
+    h3.classList.remove('onclick');});
     event.target.classList.add('onclick');
-    getCategoryContent(id, category);
+    category = selectedCategory;
+    getCategoryContent(id, selectedCategory);
   }
 
-async function getCategoryContent(id, categoryTitle){
-  if(categoryTitle == null){
-    category = "about";
-  } else {
-    category = categoryTitle;
+  async function getCategoryContent(id, categoryTitle) {
+    if (categoryTitle == null) {
+      categoryTitle = category;
+    } else {
+      category = categoryTitle;
+    }
+  
+    try {
+      let categoryData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}/`);
+      let getName = categoryData.name;
+  
+      let evolutionName = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${getName}/`);
+      console.log(`Das ist die Evol-Chain-Nr.: ${evolutionName.evolution_chain.url}`); // Die nötige URL je nach Name
+  
+      let evolutionData = await fetchData(`${evolutionName.evolution_chain.url}`);
+      console.log(evolutionName.evolves_from_species);
+      console.log(evolutionData);
+  
+      evolutionChain = evolutionData;
+      setCategoryTemplate(categoryData, id, categoryTitle);
+  
+    } catch (error) {
+      document.getElementById(`category_content${id}`).innerHTML = "";
+      console.error("Fehler beim Abrufen der Daten:", error);
+      document.getElementById(`category_content${id}`).innerHTML += `No more data available. Please try a different related pokémon name.`;
+    }
   }
-  let categoryData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}/`);
-  setCategoryTemplate(categoryData, id);
-}
 
-async function setCategoryTemplate(categoryData, id){
-  if(category == "about"){
-    loadAboutData(categoryData, id);
-  } else if (category == "stats"){
+async function setCategoryTemplate(categoryData, id, currentCategory){
+  document.getElementById(`category_content${id}`).innerHTML = "";
+  if(currentCategory == "about"){
+   loadAboutData(categoryData, id);
+  } else if (currentCategory == "stats"){
     loadStatsData(categoryData, id);
+  }else if (currentCategory == "evolution"){
+    loadEvolutionData(id);
   }
 }
 
 function loadAboutData(categoryData, id){
-  document.getElementById(`category_content${id}`).innerHTML = "";
     document.getElementById(`category_content${id}`).innerHTML += aboutCategoryTemplate(id, categoryData);
     for (let i = 0; i < categoryData.abilities.length; i++) {
       let ability = categoryData.abilities[i].ability.name;
-      document.getElementById(`abilities${id}`).innerHTML += `<li>${ability}</li>`;
+      document.getElementById(`abilities${id}`).innerHTML += `°${ability}<br>`;
     }
 }
 
 function loadStatsData(categoryData, id){
-  document.getElementById(`category_content${id}`).innerHTML = "";
   for (let i = 0; i < categoryData.stats.length; i++) {
     let statName = categoryData.stats[i].stat.name;
     let statValue = categoryData.stats[i].base_stat;
-    document.getElementById(`category_content${id}`).innerHTML += `<div class="single_category"><p>${statName}: ${statValue} <div id="${id}_${statName}" class="stat_values"></div></p></div>`;
-    generateBarChart(id, `${statName}`, statValue);
+    document.getElementById(`category_content${id}`).innerHTML += `<div class="single_category">
+      <p class="stat_name">${capitalizeFirstLetter(statName)}:</p>
+      <p id="${id}_${statName}" class="stat_values">${statValue}</p>
+    </div>`;
   }
 }
+
+async function loadEvolutionData(id){
+  let evolutionChainId = evolutionChain.id;
+  let currentChain = evolutionChain.chain.species.name;
+  let nextEvolutionChain = evolutionChain.chain.evolves_to[0]?.species?.name;
+  let furtherEvolutionChain = evolutionChain.chain.evolves_to[0]?.evolves_to[0]?.species?.name;
+
+  // Array mit allen vorkommenden Namen der Chain
+  let chainNames = [currentChain];
+  if (nextEvolutionChain) chainNames.push(nextEvolutionChain);
+  if (furtherEvolutionChain) chainNames.push(furtherEvolutionChain);
+
+  // IDs aus Namen ziehen
+  let chainIds = chainNames.map(name => nameToId[name]).filter(id => id !== undefined);
+
+  // Bilder rendern
+  let container = document.getElementById(`category_content${id}`);
+  container.innerHTML = ""; // Leeren oder optional ergänzen
+  chainIds.forEach(evoId => {
+    container.innerHTML += `
+      <img class="evolution_img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evoId}.png">
+    `;
+  });
+
+  // Optional: Speichern, falls du das später brauchst
+  evolutionChainNames = [{
+    evolutionChainId,
+    currentChain,
+    nextEvolutionChain,
+    furtherEvolutionChain
+  }];
+}
+
 
 async function searchPokemon() {
   let input = document.getElementById('search').value.toLowerCase();
@@ -238,4 +309,8 @@ async function getSuggestedPokemonByUrl(url) {
   } else {
     document.getElementById('search_suggestion').innerHTML = `Pokémon nicht gefunden!`;
   }
+}
+
+function capitalizeFirstLetter(word){
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }

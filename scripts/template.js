@@ -1,25 +1,25 @@
-function pokemonCardTemplate(data){
-    return `
+function pokemonCardTemplate(data) {
+  return `
         <div id="pokemon_card${data.id}" class="pokemon_card" onclick="openDialogOverlay(${data.id})">
             <div class="pokemon_title">
-                <p> ${data.name}</p>
+                <p class="pokemon_name"> ${capitalizeFirstLetter(data.name)}</p>
                 <p> #${data.id}</p>
             </div>
             <div id="bg_for_img${data.id}" class="bg_for_img">
-             <img class="pokemon_img" src="${imgUrl + (data.id)}.gif">
+             <img class="pokemon_img" src="${imgUrl + data.id}.gif">
             </div>
             <div id="types${data.id}" class="div_types">
             </div>
         </div>
-       `
+       `;
 }
 
-function getDialogTemplate(id, pokemon){
-    return `
+function getDialogTemplate(id, pokemon) {
+  return `
     <div id="pokemon_dialog${id}" class="pokemon_card_dialog" onclick="event.stopPropagation()">
         <div class="dialog_top_content">
                   <p class="dialog_id">#${id}</p>
-                  <p class="dialog_name">${pokemon.species.name}</p>
+                  <p class="dialog_name">${capitalizeFirstLetter(pokemon.species.name)}</p>
               <button onclick="closeDialog()" class="close_btn">Close</button>
         </div>
         <div id="bg_for_img_dialog${id}" class="bg_for_img_dialog">
@@ -40,14 +40,32 @@ function getDialogTemplate(id, pokemon){
             <button onclick="navigateDialog(${id}, 1)" class="navigation_btn">next</button>
         </div>
     </div>
-  `
+  `;
 }
 
-function aboutCategoryTemplate(id, response){
-    return `
-    <p>Species: ${response.species.name}</p>
-    <p>Height: ${response.height} cm</p>
-    <p>Weight:${response.weight} kg</p>
-    <p>Abilities:<p id="abilities${id}"></p></p>
-    `
+function aboutCategoryTemplate(id, response) {
+  return `
+    <div class="about_content">
+        <p class="about_group">Species: </p>
+        <div>
+            ${response.species.name}
+        </div>
+    </div>
+    <div class="about_content">
+        <p class="about_group">Height: </p>
+        <div>
+            ${response.height} cm
+        </div>
+    </div>
+    <div class="about_content">
+        <p class="about_group">Weight:</p>
+        <div>
+            ${response.weight} kg
+        </div>
+    </div>
+    <div class="about_content">
+        <p class="about_group">Abilities:</p>
+        <div id="abilities${id}"></div>
+    </div>
+    `;
 }
