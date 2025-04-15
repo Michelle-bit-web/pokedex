@@ -47,7 +47,7 @@ async function catchError(promises) {
       }
     });
   } catch (error) {
-    console.error("Fehler beim parallelen Abrufen:", error);
+    console.error("Error at parallel fetching data", error);
   }
 }
 
@@ -59,7 +59,7 @@ async function fetchData(url) {
     return responseToJson;
   } catch (error) {
     document.getElementById(`category_content${id}`).innerHTML = "";
-    console.error("Fehler beim Abrufen der Daten:", error);
+    console.error("Error fetching data", error);
     document.getElementById(
       `category_content${id}`
     ).innerHTML += `No more data available. Please try a different related pokémon name.`;
@@ -333,7 +333,7 @@ function showSuggestions(filteredResults, searchSuggestion) {
     });
   } else {
     searchSuggestion.classList.remove("d_none");
-    searchSuggestion.innerHTML = `Pokémon nicht gefunden!`;
+    searchSuggestion.innerHTML = `Pokémon not found!`;
   }
 }
 
