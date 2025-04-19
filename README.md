@@ -15,9 +15,9 @@ Live demo: [Go and hunt!](https://michelle-bit-web.github.io/pokedex)
 🎨 Dynamic Pokémon Cards - Displays type-based colored cards for each Pokémon.
 
 🫳 Interactive Detail View – Click a card to open a dialog with multiple categories:
-About - Basic information
-Stats - Base stats
-Evolution - Full evolution chain 
+    - About - Basic information
+    - Stats - Base stats
+    - Evolution - Full evolution chain 
 
 🧭 Dialog navigation – Switch between dialog tabs without reloading.
 
