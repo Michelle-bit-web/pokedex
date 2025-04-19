@@ -45,8 +45,7 @@ Search & Loading:
 
 It´s a frontend project, so no installation required. Simply:
 
-1. Clone the repository: [git clone https://github.com/Michelle-bit-web/pokedex-app.git
-cd pokedex-app]
+1. Clone the repository.
 2. Open index.html in your browser.
 
 ## Project Structure
