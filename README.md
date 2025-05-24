@@ -1,4 +1,4 @@
-![Game Logo](./assets/img/pokedex-logo.png)
+![Game Logo](./assets/img/pokedex-logo.png)  ![](./assets/gif/73.gif)
 
 # 🥙 Pokédex App
 
@@ -41,12 +41,22 @@ Search & Loading:
 - CSS
 - JavaScript
 
+<div style="display: flex; align-items: flex-start; gap: 20px;">
+
+<div>
+
 ## 🚀 Getting Started
 
-It´s a frontend project, so no installation required. Simply:
+It’s a frontend project, so no installation required. Simply:
 
-1. Clone the repository.
-2. Open index.html in your browser.
+1. Clone the repository.  
+2. Open `index.html` in your browser.
+
+</div>
+
+<img src="./assets/img/25-pikachu.png" alt="Pikachu" width="150" style="margin-top: 10px;" />
+
+</div>
 
 ## Project Structure
 pokedex-app/
